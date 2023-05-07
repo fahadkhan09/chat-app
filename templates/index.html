@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+    <div class="container">
+        <div class="col-lg-7 center-block">
+            <div style="display: flex;justify-content: space-between;align-items: center">
+                 {% if user.is_authenticated %}
+                  <h1>  welcome <strong>{{  user.username }}</strong></h1>
+                 {% endif %}
+                 <form method="POST" action="{% url "account_logout" %}">
+                    {% csrf_token %}
+                     <button type="submit" class="btn btn-info">{% trans "Log out" %}</button>
+                 </form>
+            </div>
+            <div style="display: flex;justify-content: space-between;align-items: center">
+            <h4>List of Chatroom</h4>
+            <a href ="{% url 'create_room' %}"> Create Room</a>
+        </div>
+           <ul class="list-group">
+               {% for room in chat_room %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <strong>Room-{{room.id}}</strong>
+
+                    <span class=""> <a href="{% url 'chat_room' slug=room.id %}">Enter Room</a></span>
+                  </li>
+               {% endfor %}
+           </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+    <script>
+        $(document).ready(function () {
+
+            var socket = new WebSocket('ws://' + window.location.host + '/chat/');
+            socket.onopen = function () {
+                console.log("Connected to chat socket");
+            };
+            socket.onclose = function () {
+                console.log("Disconnected from chat socket");
+            }
+
+        });
+    </script>
+{% endblock %}

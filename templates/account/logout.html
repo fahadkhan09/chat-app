@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% load account_tags %}
+
+{% load i18n %}
+
+
+{% block content %}
+
+    <div class="container">
+        <form method="POST" action="{% url "account_logout" %}">
+        <legend>{% trans "Log out" %}</legend>
+        <fieldset>
+            {% csrf_token %}
+            <p>{% trans "Are you sure you want to log out?" %}</p>
+            <div class="form-actions">
+                <button>{% trans "Log out" %}</button>
+            </div>
+        </fieldset>
+    </form>
+
+    </div>
+{% endblock %}
